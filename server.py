@@ -13,9 +13,11 @@ print 'Serving HTTP on port %s ...' % server_address[1]
 try:
     while True:
         client_socket, client_address = server_socket.accept()
-        
-        data = client_socket.recv(1024)
+        #print client_address
+        data = client_socket.recv(4096)
         print data
+        
+        
         
         http_response = "Hello World\r\nHTTP/1.1\r\n\r\n"
         client_socket.sendall(http_response)
