@@ -17,11 +17,7 @@ try:
         data = client_socket.recv(1024)
         print data
         
-        http_response = """\
-HTTP/1.1 200 OK
-
-Hello, World!
-"""
+        http_response = "Hello World\r\nHTTP/1.1\r\n\r\n"
         client_socket.sendall(http_response)
         client_socket.close()        
    
