@@ -1,0 +1,1 @@
+request_header = 'GET / HTTP/1.0\r\nHost: quizajk.if.its.ac.id\r\n\r\n'
