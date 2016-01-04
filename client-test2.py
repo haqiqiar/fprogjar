@@ -1,5 +1,5 @@
 import socket
-
+import sys
 # create socket and connect to server
 server_address = ('localhost', 8080)
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
