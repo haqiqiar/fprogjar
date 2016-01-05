@@ -16,7 +16,7 @@ namefile='index.html'
 def _content_length(namefile):
     num_lines = 0
     num_words = 0
-    num_chars=0
+    num_chars = 0
     with open(namefile, 'r') as f:
         for line in f:
             words = line.split()
@@ -27,7 +27,7 @@ def _content_length(namefile):
 
             return num_chars
             
-def _gen_headers(code):
+def _gen_headers(code, namefiles):
     h=''
     
     current_date = time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
