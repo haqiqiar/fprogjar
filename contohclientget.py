@@ -11,14 +11,15 @@ content = ""
 while True:
         resp = s.recv(1024)
         if resp == "": break
-        print resp
+        #print resp
         content += resp
         #file.write(resp)
 
 s.close()
 
+print content
 #print "Content : " + content
 temporarySplit = content.split('\r\n\r\n')
 responseHeader = temporarySplit[0]
 
-print responseHeader
+#print responseHeader

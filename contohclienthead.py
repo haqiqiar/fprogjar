@@ -16,9 +16,9 @@ while True:
         #file.write(resp)
 
 s.close()
-
+print content
 #print "Content : " + content
 temporarySplit = content.split('\r\n\r\n')
 responseHeader = temporarySplit[0]
 
-print responseHeader
+#print responseHeader
