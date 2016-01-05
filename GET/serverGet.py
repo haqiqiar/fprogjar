@@ -1,75 +1,110 @@
 import socket
 import sys
 import time
+import os
 
-def GET(uri,http):
-    message=""
-    date= 'Date: '+time.strftime("%a, %d %b %Y %H:%M:%S")+'\r\n'
-    server='Server: '++'\r\n'
-    lastModified='Last Modified: '++'\r\n'    
-    contentLength='Content-Length: '++'\r\n'
-    contentType='Content-Type:'+'text/html\r\n'
-    if :
-        statusCode= "HTTP/1.1 200 OK\r\n" #status 200 ok
-        eTag='ETag: '++'\r\n'
-        acceptRanges= 'Accept-Ranges: '++'\r\n'
-        connection='Connection: close \r\n'
-        content='\r\n'++'\r\n'
+def _content_length(namefile):
+    num_lines = 0
+    num_words = 0
+    num_chars=0
+    with open(namefile, 'r') as f:
+        for line in f:
+            words = line.split()
+
+            num_lines += 1
+            num_words += len(words)
+            num_chars += len(line)
+
+            return num_chars
+            
+def _gen_headers(code,namefile):
+    h=''
+    
+    current_date = time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
+
+    if (code != 301):
+             
+            if (code == 200):
+                h = 'HTTP/1.1 200 OK\n'
+                h += 'Date: ' + current_date +'\r\n'
+                h += 'Server: Simple-Python-HTTP-Server\r\n'
+                h += 'Last-Modified: ' + time.ctime(os.path.getmtime(namefile)) +'\r\n'
+                h += 'Content-Length: ' + str(_content_length(namefile)) +'\r\n'
+                h += 'Connection: close\r\n'
+            elif(code == 404):
+                h = 'HTTP/1.1 404 Not Found\r\n'
+                h += 'Date: ' + current_date +'\r\n'
+                h += 'Server: Simple-Python-HTTP-Server\r\n'
+                h += 'Connection: close\r\n'
+            elif(code == 403):
+                h = 'HTTP/1.1 403 Forbidden\r\n'
+                h += 'Date: ' + current_date +'\r\n'
+                h += 'Server: Simple-Python-HTTP-Server\r\n'
+                h += 'Connection: Keep-Alive\r\n'
+            elif(code == 400):
+                h = 'HTTP/1.1 400 Bad Request\r\n'
+                h += 'Date: ' + current_date +'\r\n'
+                h += 'Server: Simple-Python-HTTP-Server\r\n'
+                h += 'Content-Length: ' + str(_content_length(namefile)) +'\r\n'
+                h += 'Connection: close\r\n'
+    else:
+        if(code == 301):
+            h = 'HTTP/1.1 301 Moved Permanently\r\n'
+            h += 'Date: ' + current_date +'\r\n'
+            h += 'Server: Simple-Python-HTTP-Server\r\n'
+            h += 'Location: http://' + server_address[0] + ':' + str(server_address[1]) + namefile + '/'+'\r\n'
+
+    return h
+
+def GET(uri):
+    messages=''
+    try:
+        type=uri.split('.')[1]    
+        file = open(filename,'rb')
+        data = file.read(1024)
+        print 'you did it'
+    except IndexError:
+        messages+=_gen_headers(301,'')
         
-        message=statusCode+date+server+lastModified+eTag+acceptRanges+contentLength+connection+contentType+content
-    elif :
-        statusCode="HTTP/1.1 301 Move Permanently\r\n" #status 301 Move Permanently
-        location='Location: '++'\r\n'
-        content='\r\n'++'\r\n'
-        
-        message=statusCode+date+server+location+contentLength+contentType+content
-    elif :
-        statusCode="HTTP/1.1 403 Forbidden\r\n" #status 403 Forbidden
-        keepAlive='Keep-Alive: '+'timeout='+timeout+', max='+max+'\r\n'
-        connection='Connection: Keep-Alive\r\n'
-        content='\r\n'++'\r\n'
-        
-        message=statusCode+date+server+contentLength+keepAlive+connection+contentType+content
-    elif :
-        statusCode="HTTP/1.1 404 Not Found\r\n" #status 404 Not Found
-        connection='Connection: close\r\n'
-        content='\r\n'++'\r\n'
-        
-        message=statusCode+date+server+connection+contentType+content
-    elif :
-        statusCode="HTTP/1.1 500 Internal Server Error\r\n" #status 500 Internal Server Error
-        
-        message=statusCode
+    
+    #except IOError:
+       # messages+=_gen_headers(404,filename)
+        #content="""\r\n<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+#<html><head>
+#<title>404 Not Found</title>
+#</head><body>
+#<h1>Not Found</h1>
+#<p>The requested URL """+uri+""" was not found on this server.</p>
+#</body></html>"""
+    #messages+=content
+    return messages
+def requesthandler(data):
+    strr=data.split('\r\n')
+    list1 = [x for x in strr if x]
+    req=list1[0]
+    req=req.split(' ')
+	
+    cmd=req[0]
+    dirc=req[1]
+    ver=req[2]
+
+    strr=list1[1:]
+    detail={}
+	
+    for i in strr:
+        tmp=i.split(': ')
+        detail[tmp[0]]=tmp[1]
+		
+	
+    if cmd=='GET':
+        response=GET(dirc)
+    #elif cmd=='HEAD':
+        #response=HEAD(dirc)
+    #elif cmd=='POST':
+        #response=POST(dirc)
+    return response
     
     
-    return message
-# define server address, create socket, bind, and listen
-server_address = ('localhost', 8080)
-
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-server_socket.bind(server_address)
-server_socket.listen(5)
-print 'Serving HTTP on port %s ...' % server_address[1]
-# infinite loop accepting client
-try:
-    while True:
-        client_socket, client_address = server_socket.accept()
-        #print client_socket, client_address
-        
-        # receive data from client and print
-        data = client_socket.recv(1024)
-        response=data.split(' ')
-        http_response = GET(response[1],response[2])#"""\
-#HTTP/1.1 200 OK
-
-#Hello, World!
-#"""
-        client_socket.sendall(http_response)
-        # close socket client
-        client_socket.close()        
-
-# if user press ctrl + c, close socket client and exit    
-except KeyboardInterrupt:
-    server_socket.close()
-    sys.exit(0)
+data="GET /Folder/index.html HTTP/1.1\r\nHost: www.amazon.com\r\nConnection: Close\r\n\r\n"
+response=requesthandler(data)
+print response
