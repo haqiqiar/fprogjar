@@ -23,17 +23,22 @@ def extractor(strr):
 
 def readfile(dirc):
     blocked=['']
+    redirected={}
     try:
         f=open(dirc, 'rb')
         if dirc in blocked:
-            return 403
+            f=open('page/403.html', 'rb')
+            status=403
         else:
-            return 200, f
+            status=200
     except IOError:
         if os.path.isdir(dirc):
-            return 301
-            
-    
+            f=open('page/301.html', 'rb')
+            status=301
+        else:
+            f=open('page/404.html', 'rb')
+            status=404
+    return status, f
   
 def GET(data):
     return 'GET'
@@ -43,7 +48,9 @@ def HEAD(data):
 
 def POST(data, source):
     parameter=extractor(source)
-    print parameter
+    #print parameter
+    status, f = readfile(data)
+    print f.read(1000)
     
     return 'POST'
 
@@ -75,7 +82,7 @@ def requesthandler(data):
     return response
     
     
-data="POST GET/index.html HTTP/1.1\r\nHost: 127.0.0.1:8000\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nUser=Peter%2BLee&pw=123456&action=login\r\n\r\n"
+data="POST / HTTP/1.1\r\nHost: 127.0.0.1:8000\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nUser=Peter%2BLee&pw=123456&action=login\r\n\r\n"
 
 response=requesthandler(data)
 print response
