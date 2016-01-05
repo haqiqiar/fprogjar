@@ -11,7 +11,7 @@ server_address = ('localhost', 8080)
 #server_socket.bind(server_address)
 #server_socket.listen(5)
 
-namefile='index.html'
+namefile='/testdir'
 
 def _content_length(namefile):
     num_lines = 0
@@ -27,44 +27,45 @@ def _content_length(namefile):
 
             return num_chars
             
+<<<<<<< HEAD
 def _gen_headers(code, namefiles):
+=======
+def _gen_headers(code, namefile):
+>>>>>>> 256137dfaef676eef5df1f9994669837a33b13fd
     h=''
     
     current_date = time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
 
-    if (code != 301):
-            lastmodified = time.ctime(os.path.getmtime(namefile))
-            if (code == 200):
-                h = 'HTTP/1.1 200 OK\n'
-                h += 'Date: ' + current_date +'\n'
-                h += 'Server: Simple-Python-HTTP-Server\n'
-                h += 'Last-Modified: ' + lastmodified +'\n'
-                h += 'Content-Length: ' + str(_content_length(namefile)) +'\n'
-                h += 'Connection: close'
-            elif(code == 404):
-                h = 'HTTP/1.1 404 Not Found\n'
-                h += 'Date: ' + current_date +'\n'
-                h += 'Server: Simple-Python-HTTP-Server\n'
-                h += 'Content-Length: ' + str(_content_length(namefile)) +'\n'
-                h += 'Connection: close'
-            elif(code == 403):
-                h = 'HTTP/1.1 403 Forbidden\n'
-                h += 'Date: ' + current_date +'\n'
-                h += 'Server: Simple-Python-HTTP-Server\n'
-                h += 'Connection: Keep-Alive'
-            elif(code == 400):
-                h = 'HTTP/1.1 400 Bad Request\n'
-                h += 'Date: ' + current_date +'\n'
-                h += 'Server: Simple-Python-HTTP-Server\n'
-                h += 'Content-Length: ' + str(_content_length(namefile)) +'\n'
-                h += 'Connection: close'
-    else:
-        if(code == 301):
-            h = 'HTTP/1.1 301 Moved Permanently\n'
-            h += 'Date: ' + current_date +'\n'
-            h += 'Server: Simple-Python-HTTP-Server\n'
-            h += 'Location: http://' + server_address[0] + ':' + str(server_address[1]) + namefile + '/'
+    if (code == 200):
+        h = 'HTTP/1.1 200 OK\n'
+        h += 'Date: ' + current_date +'\n'
+        h += 'Server: Simple-Python-HTTP-Server\n'
+        h += 'Last-Modified: ' + time.ctime(os.path.getmtime(namefile)) +'\n'
+        h += 'Content-Length: ' + str(_content_length(namefile)) +'\n'
+        h += 'Connection: close'
+    elif(code == 404):
+        h = 'HTTP/1.1 404 Not Found\n'
+        h += 'Date: ' + current_date +'\n'
+        h += 'Server: Simple-Python-HTTP-Server\n'
+        h += 'Content-Length: ' + str(_content_length(namefile)) +'\n'
+        h += 'Connection: close'
+    elif(code == 403):
+        h = 'HTTP/1.1 403 Forbidden\n'
+        h += 'Date: ' + current_date +'\n'
+        h += 'Server: Simple-Python-HTTP-Server\n'
+        h += 'Connection: Keep-Alive'
+    elif(code == 400):
+        h = 'HTTP/1.1 400 Bad Request\n'
+        h += 'Date: ' + current_date +'\n'
+        h += 'Server: Simple-Python-HTTP-Server\n'
+        h += 'Content-Length: ' + str(_content_length(namefile)) +'\n'
+        h += 'Connection: close'
+    elif(code == 301):
+        h = 'HTTP/1.1 301 Moved Permanently\n'
+        h += 'Date: ' + current_date +'\n'
+        h += 'Server: Simple-Python-HTTP-Server\n'
+        h += 'Location: http://' + server_address[0] + ':' + str(server_address[1]) + namefile + '/'
 
     return h
 
-print _gen_headers(400)
+_gen_headers(301, namefile)
