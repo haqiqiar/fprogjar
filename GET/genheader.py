@@ -11,12 +11,12 @@ server_address = ('localhost', 8080)
 #server_socket.bind(server_address)
 #server_socket.listen(5)
 
-namefile='/testdir'
+namefile='index.html'
 
 def _content_length(namefile):
     num_lines = 0
     num_words = 0
-    num_chars=0
+    num_chars = 0
     with open(namefile, 'r') as f:
         for line in f:
             words = line.split()
@@ -27,7 +27,11 @@ def _content_length(namefile):
 
             return num_chars
             
+<<<<<<< HEAD
+def _gen_headers(code, namefiles):
+=======
 def _gen_headers(code, namefile):
+>>>>>>> 256137dfaef676eef5df1f9994669837a33b13fd
     h=''
     
     current_date = time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
@@ -50,11 +54,10 @@ def _gen_headers(code, namefile):
         h += 'Date: ' + current_date +'\n'
         h += 'Server: Simple-Python-HTTP-Server\n'
         h += 'Connection: Keep-Alive'
-    elif(code == 400):
-        h = 'HTTP/1.1 400 Bad Request\n'
+    elif(code == 500):
+        h = 'HTTP/1.1 500 Internal Server Error\n'
         h += 'Date: ' + current_date +'\n'
         h += 'Server: Simple-Python-HTTP-Server\n'
-        h += 'Content-Length: ' + str(_content_length(namefile)) +'\n'
         h += 'Connection: close'
     elif(code == 301):
         h = 'HTTP/1.1 301 Moved Permanently\n'
@@ -62,6 +65,6 @@ def _gen_headers(code, namefile):
         h += 'Server: Simple-Python-HTTP-Server\n'
         h += 'Location: http://' + server_address[0] + ':' + str(server_address[1]) + namefile + '/'
 
-    return h
+    print h
 
-_gen_headers(301, namefile)
+_gen_headers(500, namefile)

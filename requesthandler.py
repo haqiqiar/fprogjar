@@ -95,7 +95,11 @@ def requesthandler(data):
     return response
     
     
+<<<<<<< HEAD
 data="GET GET/index.html?q=511310005 HTTP/1.1\r\nHost: 127.0.0.1:8000\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nUser=Peter%2BLee&pw=123456&action=login\r\n\r\n"
+=======
+data="POST index.html HTTP/1.1\r\nHost: 127.0.0.1:8000\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nUser=Peter%2BLee&pw=123456&action=login\r\n\r\n"
+>>>>>>> 4d2658185f64c5e903277af15a536b01485e6a1d
 
 response=requesthandler(data)
 print response
