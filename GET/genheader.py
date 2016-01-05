@@ -62,6 +62,10 @@ def _gen_headers(code, namefile):
         h += 'Server: Simple-Python-HTTP-Server\n'
         h += 'Location: http://' + server_address[0] + ':' + str(server_address[1]) + namefile + '/'
 
-    print h
+    return h
 
+<<<<<<< HEAD
 _gen_headers(301, namefile)
+=======
+print _gen_headers(400)
+>>>>>>> 040f26b80da831ebe53aec50f9dc9fd22e83d386
