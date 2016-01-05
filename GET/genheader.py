@@ -27,11 +27,7 @@ def _content_length(namefile):
 
             return num_chars
             
-<<<<<<< HEAD
-def _gen_headers(code, namefiles):
-=======
 def _gen_headers(code, namefile):
->>>>>>> 256137dfaef676eef5df1f9994669837a33b13fd
     h=''
     
     current_date = time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime())
