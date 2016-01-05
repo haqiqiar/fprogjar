@@ -39,12 +39,15 @@ def readfile(dirc):
             f=open('page/404.html', 'rb')
             status=404
     return status, f
-  
+
 def GET(data):
     return 'GET'
 
 def HEAD(data):
-    return 'HEAD'
+    status, response_content = readfile(data)
+    temp = _gen_headers(status, data)
+
+    return temp
 
 def POST(data, source):
     parameter=extractor(source)
