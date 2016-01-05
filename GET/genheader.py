@@ -64,8 +64,4 @@ def _gen_headers(code, namefile):
 
     return h
 
-<<<<<<< HEAD
 _gen_headers(301, namefile)
-=======
-print _gen_headers(400)
->>>>>>> 040f26b80da831ebe53aec50f9dc9fd22e83d386
