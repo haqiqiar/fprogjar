@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jan 05 06:58:27 2016
+Created on Tue Jan 05 09:33:36 2016
 
-@author: haqiqi
+@author: ROE
 """
+
 
 import os
 
@@ -15,7 +16,7 @@ def extractor(strr):
         nam=int('0x'+num, 16)
         strr=strr.replace('%'+num, chr(nam))
     strr=strr.split('&')                      #split parameter
-    parameter={}                                   #dictionary nampung semua data yang ada di parameter 
+    parameter={}                                   #dictionary nampung semua data yang ada di parameter
     for i in strr:
         tmp=i.split('=')
         parameter[tmp[0]]=tmp[1]
@@ -23,16 +24,12 @@ def extractor(strr):
 
 def readfile(dirc):
     blocked=['']
-    internalServerError=['']
     redirected={}
     try:
         f=open(dirc, 'rb')
         if dirc in blocked:
             f=open('page/403.html', 'rb')
             status=403
-        elif dirc in internalServerError:
-            f=open('page/500.html', 'rb')
-            status=500
         else:
             status=200
     except IOError:
@@ -43,27 +40,18 @@ def readfile(dirc):
             f=open('page/404.html', 'rb')
             status=404
     return status, f
-
+  
 def GET(data):
-    source=data.split('?')
-    parameter=extractor(source[1])
-    #print parameter
-    status, files = readfile(source[0])
-    print files.read(1000)
-    print status
     return 'GET'
 
 def HEAD(data):
-    status, response_content = readfile(data)
-    temp = _gen_headers(status, data)
-
-    return temp
+    return 'HEAD'
 
 def POST(data, source):
     parameter=extractor(source)
     #print parameter
-    status, files = readfile(data)
-    print files.read(1000)
+    status, f = readfile(data)
+    print f.read(1000)
     
     return 'POST'
 
@@ -95,7 +83,7 @@ def requesthandler(data):
     return response
     
     
-data="GET GET/index.html?q=511310005 HTTP/1.1\r\nHost: 127.0.0.1:8000\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nUser=Peter%2BLee&pw=123456&action=login\r\n\r\n"
+data="POST /page HTTP/1.1\r\nHost: 127.0.0.1:8000\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nUser=Peter%2BLee&pw=123456&action=login\r\n\r\n"
 
 response=requesthandler(data)
 print response
