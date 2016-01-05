@@ -51,7 +51,7 @@ def GET(data):
     status, files = readfile(source[0])
     print files.read(1000)
     print status
-    return _gen_headers(status, source[0])
+    #return _gen_headers(status, source[0])
 
 def HEAD(data):
     status, response_content = readfile(data)
