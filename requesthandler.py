@@ -39,7 +39,7 @@ def _gen_headers(code, namefile):
         h = 'HTTP/1.1 404 Not Found\r\n'
         h += 'Date: ' + current_date +'\r\n'
         h += 'Server: Simple-Python-HTTP-Server\r\n'
-        h += 'Content-Length: ' + str(_content_length(namefile)) +'\r\n'
+        #h += 'Content-Length: ' + str(_content_length(namefile)) +'\r\n'
         h += 'Connection: close\r\n'
     elif(code == 403):
         h = 'HTTP/1.1 403 Forbidden\r\n'
@@ -55,7 +55,7 @@ def _gen_headers(code, namefile):
         h = 'HTTP/1.1 301 Moved Permanently\r\n'
         h += 'Date: ' + current_date +'\r\n'
         h += 'Server: Simple-Python-HTTP-Server\r\n'
-        h += 'Location: http://' + server_address[0] + ':' + str(server_address[1]) + namefile + '/' + '\r\n'
+        h += 'Location: http://' + self.server_address[0] + ':' + str(server_address[1]) + namefile + '/' + '\r\n'
 
     return h
 	
