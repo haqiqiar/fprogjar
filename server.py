@@ -106,7 +106,7 @@ class Client(threading.Thread):
             h = 'HTTP/1.1 301 Moved Permanently\r\n'
             h += 'Date: ' + current_date +'\r\n'
             h += 'Server: Simple-Python-HTTP-Server\r\n'
-            h += 'Location: http://' + 'localhost' + ':' + str(5000) +'/' + namefile + '/' + '\r\n'
+            h += 'Location: http://' + 'localhost' + ':' + str(5000) +'/' + namefile + '/' + 'index.html\r\n'
     
         return h
     	
@@ -125,7 +125,7 @@ class Client(threading.Thread):
         return parameter   
     
     def readfile(self, dirc):
-        blocked=['']
+        blocked=['page/500.html']
         
         redirected={}
         try:
@@ -149,9 +149,10 @@ class Client(threading.Thread):
         source=data.split('?')
         try:
             parameter=self.extractor(source[1])
+            print parameter
         except:
-            parameter=0
-        #print parameter
+            parametr=0
+        
         status, files = self.readfile(source[0])
         resp= files.read(1000)
         header=self._gen_headers(status, source[0])
@@ -164,7 +165,6 @@ class Client(threading.Thread):
     
     def POST(self, data, source):
         parameter=self.extractor(source)
-        #print parameter
         status, files = self.readfile(data)
         resp=files.read(1000)
         header=self._gen_headers(status, data)
@@ -173,6 +173,7 @@ class Client(threading.Thread):
     
     
     def requesthandler(self,data):
+        print data
         try:
             if data[:4]=='POST':
                 strr=data.split('\r\n\r\n')
@@ -189,6 +190,7 @@ class Client(threading.Thread):
             
             cmd=req[0]
             dirc=req[1]
+            dirc=dirc[1:]
             ver=req[2]
             
             strr=list1[1:]
@@ -214,7 +216,7 @@ class Client(threading.Thread):
         while running:
             
             data= self.client.recv(self.size)
-            
+            print self.address
             la=self.requesthandler(data)
             
             self.client.send(la)

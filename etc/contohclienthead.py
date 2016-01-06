@@ -6,7 +6,7 @@ s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 s.connect(("localhost",5000))
 
 
-s.send("GET GET/index.html HTTP/1.0\r\nHost: localhost:5000\n\n")
+
 content = ""
 while True:
         resp = s.recv(1024)
@@ -16,8 +16,8 @@ while True:
         #file.write(resp)
 
 s.close()
-
 <<<<<<< HEAD
+
 print "Content : " + content
 =======
 print content
@@ -25,11 +25,5 @@ print content
 >>>>>>> cf190ff6917b95f031dabf77a165f0516e610142
 temporarySplit = content.split('\r\n\r\n')
 responseHeader = temporarySplit[0]
-response=temporarySplit[1]
 
-<<<<<<< HEAD
-#$print responseHeader
-#print response
-=======
 #print responseHeader
->>>>>>> cf190ff6917b95f031dabf77a165f0516e610142
