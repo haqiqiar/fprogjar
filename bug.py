@@ -184,13 +184,9 @@ class Client(threading.Thread):
                 strr=data.split('\r\n')
             
             list1 = [x for x in strr if x]
-            
-            
             req=list1[0]
-           
-                
             req=req.split(' ')
-        
+            
             cmd=req[0]
             dirc=req[1]
             ver=req[2]
