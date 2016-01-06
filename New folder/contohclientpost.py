@@ -3,26 +3,21 @@ __author__ = 'zq'
 import socket
 
 s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-s.connect(("localhost",5000))
+s.connect(("localhost",8080))
 
 
-s.send("HEAD GET/index.html HTTP/1.0\r\nHost: localhost:5000\r\n\r\n")
+s.send("POST / HTTP/1.0\r\nHost: localhost:80\n\n")
 content = ""
 while True:
         resp = s.recv(1024)
         if resp == "": break
-        #print resp
+        print resp
         content += resp
         #file.write(resp)
 
 s.close()
-<<<<<<< HEAD
-
-print "Content : " + content
-=======
 print content
 #print "Content : " + content
->>>>>>> cf190ff6917b95f031dabf77a165f0516e610142
 temporarySplit = content.split('\r\n\r\n')
 responseHeader = temporarySplit[0]
 

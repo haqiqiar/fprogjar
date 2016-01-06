@@ -1,13 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Jan 05 06:58:27 2016
-
-@author: haqiqi
-"""
-
+import socket
+import sys
 import os
 import signal
-import sys
 import time
 
 def _content_length(namefile):
@@ -39,7 +33,7 @@ def _gen_headers(code, namefile):
         h = 'HTTP/1.1 404 Not Found\r\n'
         h += 'Date: ' + current_date +'\r\n'
         h += 'Server: Simple-Python-HTTP-Server\r\n'
-        #h += 'Content-Length: ' + str(_content_length(namefile)) +'\r\n'
+        h += 'Content-Length: ' + str(_content_length(namefile)) +'\r\n'
         h += 'Connection: close\r\n'
     elif(code == 403):
         h = 'HTTP/1.1 403 Forbidden\r\n'
@@ -55,7 +49,7 @@ def _gen_headers(code, namefile):
         h = 'HTTP/1.1 301 Moved Permanently\r\n'
         h += 'Date: ' + current_date +'\r\n'
         h += 'Server: Simple-Python-HTTP-Server\r\n'
-        h += 'Location: http://' + self.server_address[0] + ':' + str(server_address[1]) + namefile + '/' + '\r\n'
+        h += 'Location: http://' + server_address[0] + ':' + str(server_address[1]) + namefile + '/' + '\r\n'
 
     return h
 	
@@ -164,11 +158,30 @@ def requesthandler(data):
     elif cmd=='POST':
         response=POST(dirc, postsource)
     return response
+
+def main():
     
+    server_address = ('localhost', 8080)
     
-
-data="GET sum.php?what=Progjar_kudu_dapet_A HTTP/1.1\r\nHost: 127.0.0.1:8000\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nUser=Peter%2BLee&pw=123456&action=login\r\n\r\n"
-
-
-response=requesthandler(data)
-print response
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_socket.bind(server_address)
+    server_socket.listen(5)
+    
+    print 'Serving HTTP on port %s ...' % server_address[1]
+    
+    try:
+        while True:
+            client_socket, client_address = server_socket.accept()
+            #print client_address
+            data = client_socket.recv(4096)
+            print data
+            
+            http_response = requesthandler(data)
+            client_socket.sendall(http_response)
+            client_socket.close()        
+       
+    except KeyboardInterrupt:
+        server_socket.close()
+        sys.exit(0)
+main()
